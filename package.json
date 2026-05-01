@@ -1,0 +1,66 @@
+{
+  "name": "lexara",
+  "version": "2.0.0",
+  "description": "析言 LEXARA — 本地语料与数据分析平台",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win --x64",
+    "build:mac": "electron-builder --mac",
+    "build:mac-arm": "electron-builder --mac --arm64",
+    "build:linux": "electron-builder --linux",
+    "dist": "electron-builder --win --linux"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.lexara.desktop",
+    "productName": "析言 LEXARA",
+    "copyright": "Copyright © 2025 LEXARA",
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "assets/**"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ],
+      "darkModeSupport": true
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ]
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": ["AppImage", "deb"],
+      "category": "Education"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "析言 LEXARA",
+      "installerLanguages": ["zh_CN", "en_US"],
+      "language": "2052"
+    },
+    "dmg": {
+      "title": "安装 析言 LEXARA",
+      "contents": [
+        { "x": 410, "y": 180, "type": "link", "path": "/Applications" },
+        { "x": 130, "y": 180, "type": "file" }
+      ],
+      "backgroundColor": "#0f1419"
+    }
+  }
+}

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>析言 LEXARA</title>
+<style>
+/* ═══════════════════════════════════════════════════
+   LEXARA · Obsidian — Premium dark theme
+   Warm near-black · Champagne gold · Refined depth
+   ═══════════════════════════════════════════════════ */
+:root{
+  --bg:#0C0B10; --bg-card:#131118; --bg-raised:#1A1824;
+  --bg-input:rgba(255,255,255,.06); --bg-hover:rgba(255,255,255,.04);
+  --bg-sel:rgba(196,148,72,.10);
+  --sep:rgba(255,255,255,.09); --sep-2:rgba(255,255,255,.18);
+  --label:#EDE8DF;
+  --label-2:rgba(237,232,223,.72); --label-3:rgba(237,232,223,.45);
+  --label-4:rgba(237,232,223,.2);
+  --gold:#C4904A; --gold-2:#E8B870;
+  --blue:#7B9CF4; --green:#5DBEA3; --orange:#E89050;
+  --red:#E86055; --purple:#A68DD4; --teal:#5ABCCC;
+  --indigo:#7B82E8; --pink:#E0709A; --yellow:#E8C84A;
+  --font:-apple-system,'SF Pro Text','PingFang SC','Helvetica Neue',sans-serif;
+  --font-d:-apple-system,'SF Pro Display','PingFang SC','Helvetica Neue',sans-serif;
+  --font-m:'SF Mono','Menlo','Monaco','Courier New',monospace;
+  --r:10px; --r-sm:6px;
+  --sh:0 1px 3px rgba(0,0,0,.5),0 1px 2px rgba(0,0,0,.35);
+  --sh-md:0 4px 20px rgba(0,0,0,.6),0 1px 6px rgba(0,0,0,.3);
+  --sh-lg:0 24px 80px rgba(0,0,0,.7),0 8px 24px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--label);font-size:13px;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
+
+/* Header */
+#header{height:54px;background:rgba(12,11,16,.93);backdrop-filter:saturate(160%) blur(24px);-webkit-backdrop-filter:saturate(160%) blur(24px);border-bottom:1px solid var(--sep);display:flex;align-items:center;flex-shrink:0;-webkit-app-region:drag;padding:0 16px 0 20px;position:sticky;top:0;z-index:100}
+#logo{display:flex;align-items:center;gap:11px;margin-right:22px;padding-right:22px;border-right:1px solid var(--sep-2)}
+#logo-mark{width:32px;height:32px;background:linear-gradient(145deg,#C4904A,#7A5220);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;font-family:var(--font-d);box-shadow:0 2px 12px rgba(196,144,74,.45),0 0 0 1px rgba(255,255,255,.08)}
+#logo-text .name{font-family:var(--font-d);font-size:14px;font-weight:700;letter-spacing:.3px;line-height:1.25;color:#fff}
+#logo-text .name em{font-style:normal;color:#fff;font-weight:800;-webkit-text-fill-color:#fff}
+#logo-text .tagline{font-family:var(--font-m);font-size:7.5px;color:rgba(237,232,223,.55);letter-spacing:1px;margin-top:2px;line-height:1.3}
+
+/* Tabs */
+#tabs{display:flex;align-items:center;gap:2px;-webkit-app-region:no-drag;flex:1}
+.tab{padding:6px 12px;border-radius:7px;font-size:12.5px;font-weight:500;color:rgba(237,232,223,.68);cursor:pointer;border:1px solid transparent;background:transparent;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap;font-family:var(--font)}
+.tab:hover{background:var(--bg-hover);color:var(--label)}
+.tab.active{background:var(--bg-raised);color:var(--gold);box-shadow:var(--sh);border-color:rgba(196,144,74,.18)}
+.tab .icon{font-size:11px;opacity:.65}
+.tab.active .icon{opacity:1}
+#header-right{margin-left:auto;display:flex;align-items:center;gap:10px;-webkit-app-region:no-drag}
+#corpus-pill{background:var(--bg-raised);border:1px solid var(--sep-2);border-radius:20px;padding:4px 12px;font-size:11px;font-family:var(--font-m);color:rgba(237,232,223,.7);box-shadow:var(--sh)}
+#status-dot{width:7px;height:7px;border-radius:50%;background:var(--label-4)}
+#status-dot.active{background:var(--green);box-shadow:0 0 0 3px rgba(93,190,163,.2)}
+
+/* Sidebar */
+#main{display:flex;flex:1;overflow:hidden}
+#sidebar{width:230px;background:var(--bg-card);border-right:1px solid var(--sep);display:flex;flex-direction:column;flex-shrink:0}
+#sidebar-header{padding:12px 14px 10px;border-bottom:1px solid var(--sep);display:flex;align-items:center;justify-content:space-between}
+#sidebar-title{font-size:10.5px;font-weight:600;color:rgba(237,232,223,.5);letter-spacing:.8px;text-transform:uppercase}
+#btn-load{background:linear-gradient(135deg,var(--gold),#7A5220);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--font);box-shadow:0 2px 8px rgba(196,144,74,.3)}
+#btn-load:hover{filter:brightness(1.1);box-shadow:0 3px 12px rgba(196,144,74,.45)}
+#btn-load:active{filter:brightness(.9);transform:scale(.97)}
+#sel-toolbar{padding:6px 14px;border-bottom:1px solid var(--sep);display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.2);min-height:34px}
+#sel-all-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--label-2);padding:3px 0;font-family:var(--font)}
+#sel-all-btn:hover{color:var(--gold)}
+#sel-count{margin-left:auto;font-size:11px;font-family:var(--font-m);color:rgba(237,232,223,.45)}
+input[type=checkbox]{accent-color:var(--gold);width:13px;height:13px}
+#seg-mode-bar{padding:7px 14px;border-bottom:1px solid var(--sep);display:flex;align-items:center;gap:8px}
+#seg-mode-label{font-size:11px;color:var(--label-3);flex-shrink:0}
+#seg-mode-toggle{display:flex;background:rgba(0,0,0,.3);border:1px solid var(--sep);border-radius:7px;padding:2px;gap:1px;flex:1}
+.smode-btn{flex:1;padding:3px 6px;border:none;background:transparent;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;color:var(--label-3);transition:all .15s;font-family:var(--font)}
+.smode-btn.active{background:var(--bg-raised);color:var(--gold);box-shadow:var(--sh);border:1px solid rgba(196,144,74,.2)}
+
+/* File list */
+#file-list{flex:1;overflow-y:auto;padding:5px 8px}
+.file-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:var(--r-sm);cursor:pointer;transition:background .12s;border:1.5px solid transparent;margin-bottom:2px}
+.file-item:hover{background:var(--bg-hover)}
+.file-item.selected{background:var(--bg-sel);border-color:rgba(196,144,74,.2)}
+.file-item.previewing{border-color:var(--gold)!important}
+.file-cb{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:1.5px solid var(--sep-2);border-radius:4px;background:transparent;cursor:pointer;transition:all .15s;flex-shrink:0}
+.file-cb:checked{background:var(--gold);border-color:var(--gold);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='%23fff' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+.file-cb:hover:not(:checked){border-color:var(--gold)}
+.file-info{flex:1;min-width:0}
+.file-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--label)}
+.file-meta{font-size:10px;color:var(--label-3);margin-top:1px;font-family:var(--font-m)}
+.file-actions{display:flex;gap:2px;flex-shrink:0;opacity:0;transition:opacity .15s}
+.file-item:hover .file-actions{opacity:1}
+.file-btn{width:22px;height:22px;border-radius:4px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--label-3);transition:all .12s}
+.file-btn:hover{background:var(--bg-input);color:var(--label)}
+.file-btn.danger:hover{background:rgba(232,96,85,.15);color:var(--red)}
+.seg-badge{display:inline-block;font-size:9px;font-family:var(--font-m);padding:1px 4px;border-radius:4px;margin-left:4px;vertical-align:middle}
+.seg-badge.word{background:rgba(196,144,74,.15);color:var(--gold)}
+.seg-badge.char{background:rgba(232,144,80,.12);color:var(--orange)}
+#drop-zone{margin:8px;border:1.5px dashed var(--sep-2);border-radius:var(--r);padding:18px 10px;text-align:center;color:var(--label-3);font-size:12px;line-height:1.8;cursor:pointer;transition:all .2s}
+#drop-zone:hover,#drop-zone.drag-over{border-color:var(--gold);color:var(--gold);background:rgba(196,144,74,.04)}
+#sidebar-stats{padding:10px 14px;border-top:1px solid var(--sep);background:rgba(0,0,0,.2)}
+.stat-row{display:flex;justify-content:space-between;padding:2px 0}
+.stat-row .sk{font-size:11px;color:var(--label-3)}
+.stat-row .sv{font-size:11px;font-family:var(--font-m);font-weight:600;color:var(--gold)}
+#sel-notice{padding:5px 14px;background:rgba(196,144,74,.08);border-top:1px solid rgba(196,144,74,.15);font-size:11px;color:var(--gold);text-align:center;display:none}
+#sel-notice.show{display:block}
+
+/* Content */
+#content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.panel{display:none;flex:1;flex-direction:column;overflow:hidden}
+.panel.active{display:flex}
+.panel-bar{padding:8px 16px;background:var(--bg-card);border-bottom:1px solid var(--sep);display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.panel-bar label{font-size:12px;color:rgba(237,232,223,.65)}
+.panel-bar input[type=text],.panel-bar input[type=number]{background:var(--bg-input);border:1px solid var(--sep);border-radius:var(--r-sm);padding:5px 10px;font-size:12px;color:var(--label);font-family:var(--font);outline:none;transition:all .15s}
+.panel-bar input:focus{background:rgba(196,144,74,.08);border-color:rgba(196,144,74,.4);box-shadow:0 0 0 2px rgba(196,144,74,.15)}
+.panel-bar input[type=text]{width:160px}
+.panel-bar input[type=number]{width:62px}
+.panel-bar select{background:var(--bg-input);border:1px solid var(--sep);border-radius:var(--r-sm);padding:5px 8px;font-size:12px;color:var(--label);font-family:var(--font);outline:none;cursor:pointer}
+.btn{background:var(--bg-raised);border:1px solid var(--sep-2);border-radius:var(--r-sm);padding:5px 13px;font-size:12px;font-weight:500;color:var(--label-2);cursor:pointer;font-family:var(--font);transition:all .12s;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.08);color:var(--label)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(135deg,var(--gold),#7A5220);border-color:rgba(196,144,74,.3);color:#fff;box-shadow:0 2px 8px rgba(196,144,74,.3)}
+.btn.primary:hover{filter:brightness(1.1);box-shadow:0 3px 12px rgba(196,144,74,.4)}
+.sep{width:1px;height:18px;background:var(--sep-2);margin:0 2px}
+.badge{background:var(--bg-raised);border:1px solid var(--sep);border-radius:20px;padding:3px 10px;font-size:11px;font-family:var(--font-m);color:var(--label-2)}
+
+/* Tables */
+.table-wrap{flex:1;overflow:auto;background:var(--bg-card)}
+table{width:100%;border-collapse:collapse}
+thead{position:sticky;top:0;z-index:5}
+thead tr{background:rgba(10,9,14,.96);backdrop-filter:blur(10px)}
+th{padding:9px 14px;text-align:left;font-size:10.5px;font-weight:600;color:rgba(237,232,223,.5);letter-spacing:.5px;border-bottom:1px solid var(--sep);cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--gold)}
+th.sort-asc::after{content:' ↑';color:var(--gold)}
+th.sort-desc::after{content:' ↓';color:var(--gold)}
+td{padding:7px 14px;border-bottom:1px solid var(--sep);font-size:12px;color:rgba(237,232,223,.85)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-hover)}
+td.num{font-family:var(--font-m);text-align:right;color:var(--gold)}
+td.word{font-family:var(--font-m);color:var(--label)}
+td.node{color:var(--gold);font-weight:700;font-family:var(--font-m);text-align:center}
+td.ctx{color:rgba(237,232,223,.58);font-family:var(--font-m);font-size:11px;text-align:right}
+td.ctx-r{color:rgba(237,232,223,.58);font-family:var(--font-m);font-size:11px}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:10px;color:var(--label-3);background:var(--bg-card)}
+.empty-state .big{font-size:44px;opacity:.12}
+.empty-state p{font-size:13px}
+
+/* Stats grid */
+#panel-stats .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:20px;overflow-y:auto;flex:1}
+.stat-card{background:var(--bg-card);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:5px;box-shadow:var(--sh);border:1px solid var(--sep);border-top:2px solid;transition:transform .15s}
+.stat-card:hover{transform:translateY(-1px);box-shadow:var(--sh-md)}
+.stat-card .sc-label{font-size:11px;color:var(--label-3)}
+.stat-card .sc-value{font-family:var(--font-m);font-size:26px;font-weight:700;margin-top:4px}
+.stat-card .sc-sub{font-size:11px;color:var(--label-3)}
+
+/* Viz */
+#chart-container{flex:1;padding:20px;display:flex;flex-direction:column;gap:10px;overflow:hidden;background:var(--bg-card)}
+#chart-title{font-size:11px;color:var(--label-3);font-family:var(--font-m);letter-spacing:.5px}
+#chart-canvas{width:100%;flex:1;display:block;border-radius:var(--r-sm)}
+
+/* Statusbar */
+#statusbar{height:24px;background:var(--bg-card);border-top:1px solid var(--sep);display:flex;align-items:center;padding:0 14px;gap:16px;flex-shrink:0}
+.sb-item{font-size:11px;font-family:var(--font-m);color:var(--label-3);display:flex;gap:4px}
+.sb-item span{color:var(--label-2)}
+#sb-msg{margin-left:auto;font-size:11px;font-weight:500}
+
+/* Preview Modal */
+#preview-modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);align-items:flex-start;justify-content:center;padding-top:60px}
+#preview-modal.open{display:flex}
+#preview-box{background:var(--bg-card);border-radius:14px;width:min(800px,94vw);max-height:78vh;display:flex;flex-direction:column;box-shadow:var(--sh-lg);border:1px solid var(--sep-2);animation:slideUp .22s cubic-bezier(.34,1.56,.64,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+#preview-header{padding:16px 20px 12px;border-bottom:1px solid var(--sep);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+#preview-title{font-size:15px;font-weight:600;color:var(--label)}
+#preview-meta{font-size:11px;color:var(--label-3);margin-top:3px;font-family:var(--font-m)}
+#preview-close{background:var(--bg-input);border:none;width:26px;height:26px;border-radius:50%;color:var(--label-2);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
+#preview-close:hover{background:rgba(255,255,255,.12);color:var(--label)}
+#preview-tabs{display:flex;border-bottom:1px solid var(--sep);flex-shrink:0;padding:0 16px;gap:4px}
+.ptab{padding:9px 14px;font-size:13px;color:var(--label-2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.ptab:hover{color:var(--label)}
+.ptab.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:500}
+#preview-body{flex:1;overflow-y:auto;padding:16px 20px}
+.tok-wrap{display:flex;flex-wrap:wrap;gap:4px;line-height:1.8}
+.tok{display:inline-block;padding:2px 8px;border-radius:5px;font-size:12px;font-family:var(--font-m);cursor:default;transition:all .1s}
+.tok:hover{filter:brightness(1.2);transform:scale(1.04)}
+.tok.zh{background:rgba(196,144,74,.12);color:var(--gold-2)}
+.tok.en{background:rgba(93,190,163,.1);color:var(--green)}
+.tok.num{background:rgba(232,144,80,.1);color:var(--orange)}
+.tok.stop{opacity:.22;background:var(--bg-input);color:var(--label-3)}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="logo">
+    <div id="logo-mark">析</div>
+    <div id="logo-text"><div class="name">析言 <em>LEXARA</em></div><div class="tagline">Lexical Exploration · Analysis · Research &amp; Application</div></div>
+  </div>
+  <div id="tabs">
+    <button class="tab active" data-tab="wordlist"><span class="icon">≡</span>词表</button>
+    <button class="tab" data-tab="kwic"><span class="icon">⊞</span>索引行 KWIC</button>
+    <button class="tab" data-tab="ngram"><span class="icon">⊛</span>N-Gram</button>
+    <button class="tab" data-tab="collocates"><span class="icon">⬡</span>搭配词</button>
+    <button class="tab" data-tab="stats"><span class="icon">∑</span>统计</button>
+    <button class="tab" data-tab="viz"><span class="icon">◈</span>可视化</button>
+  </div>
+  <div id="header-right">
+    <div id="corpus-pill">无语料</div>
+    <div id="status-dot"></div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="sidebar">
+    <div id="sidebar-header">
+      <span id="sidebar-title">语料文件</span>
+      <button id="btn-load" onclick="loadFiles()">+ 载入</button>
+    </div>
+
+    <div id="sel-toolbar">
+      <button id="sel-all-btn" onclick="toggleSelectAll()">
+        <input type="checkbox" id="sel-all-cb" style="pointer-events:none;accent-color:var(--blue);width:14px;height:14px">
+        <span>全选</span>
+      </button>
+      <span id="sel-count">0 / 0</span>
+    </div>
+
+    <div id="seg-mode-bar">
+      <span id="seg-mode-label">分词</span>
+      <div id="seg-mode-toggle">
+        <button class="smode-btn active" id="mode-word" onclick="setSegMode('word')">词语级</button>
+        <button class="smode-btn" id="mode-char" onclick="setSegMode('char')">字符级</button>
+      </div>
+    </div>
+
+    <div id="drop-zone" onclick="loadFiles()">拖放 .txt 文件至此<br>或点击选择</div>
+    <div id="file-list"></div>
+    <div id="sel-notice"></div>
+
+    <div id="sidebar-stats">
+      <div class="stat-row"><span class="sk">已选文件</span><span class="sv" id="ss-files">0</span></div>
+      <div class="stat-row"><span class="sk">词形数</span><span class="sv" id="ss-tokens">0</span></div>
+      <div class="stat-row"><span class="sk">词型数</span><span class="sv" id="ss-types">0</span></div>
+      <div class="stat-row"><span class="sk">TTR</span><span class="sv" id="ss-ttr">—</span></div>
+    </div>
+  </div>
+
+  <div id="content">
+    <!-- ① Word List -->
+    <div class="panel active" id="panel-wordlist">
+      <div class="panel-bar">
+        <label>最低频次</label>
+        <input type="number" id="wl-minfreq" value="1" min="1" style="width:55px">
+        <label><input type="checkbox" id="wl-stopwords"> 过滤停用词</label>
+        <div class="sep"></div>
+        <button class="btn primary" onclick="runWordList()">生成词表</button>
+        <button class="btn" onclick="exportWordList()">导出 CSV</button>
+        <div class="sep"></div>
+        <span class="badge" id="wl-count">0 词</span>
+      </div>
+      <div class="table-wrap">
+        <div class="empty-state" id="wl-empty"><div class="big">≡</div><p>勾选文件后生成词表</p></div>
+        <table id="wl-table" style="display:none">
+          <thead><tr><th data-col="rank">排名</th><th data-col="word">词形</th><th data-col="freq">频次</th><th data-col="pct">占比 %</th><th data-col="cum">累积 %</th></tr></thead>
+          <tbody id="wl-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ② KWIC -->
+    <div class="panel" id="panel-kwic">
+      <div class="panel-bar">
+        <label>搜索词</label><input type="text" id="kwic-query" placeholder="词语或正则…" style="width:170px">
+        <label>窗口</label><input type="number" id="kwic-window" value="5" min="1" max="20" style="width:50px">
+        <label><input type="checkbox" id="kwic-regex"> 正则</label>
+        <label><input type="checkbox" id="kwic-case"> 大小写</label>
+        <div class="sep"></div>
+        <button class="btn primary" onclick="runKwic()">搜索</button>
+        <label>排序</label>
+        <select id="kwic-sort">
+          <option value="pos">出现顺序</option><option value="l1">左一词</option>
+          <option value="r1">右一词</option><option value="node">节点词</option>
+        </select>
+        <button class="btn" onclick="exportKwic()">导出</button>
+        <span class="badge" id="kwic-count">0 条</span>
+      </div>
+      <div class="table-wrap">
+        <div class="empty-state" id="kwic-empty"><div class="big">⊞</div><p>输入搜索词查看索引行</p></div>
+        <table id="kwic-table" style="display:none">
+          <thead><tr><th style="width:40px">#</th><th style="width:40%">左侧语境</th><th style="width:100px;text-align:center">节点词</th><th>右侧语境</th></tr></thead>
+          <tbody id="kwic-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ③ N-Gram -->
+    <div class="panel" id="panel-ngram">
+      <div class="panel-bar">
+        <label>N 值</label>
+        <select id="ng-n"><option value="2">2-gram</option><option value="3">3-gram</option><option value="4">4-gram</option><option value="5">5-gram</option></select>
+        <label>最低频次</label><input type="number" id="ng-minfreq" value="2" min="1" style="width:55px">
+        <div class="sep"></div>
+        <button class="btn primary" onclick="runNgram()">分析</button>
+        <button class="btn" onclick="exportNgram()">导出</button>
+        <span class="badge" id="ng-count">0 条</span>
+      </div>
+      <div class="table-wrap">
+        <div class="empty-state" id="ng-empty"><div class="big">⊛</div><p>选择 N 值并点击分析</p></div>
+        <table id="ng-table" style="display:none">
+          <thead><tr><th data-col="rank">排名</th><th data-col="gram">N-Gram</th><th data-col="freq">频次</th><th data-col="pct">占比 %</th></tr></thead>
+          <tbody id="ng-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ④ Collocates -->
+    <div class="panel" id="panel-collocates">
+      <div class="panel-bar">
+        <label>节点词</label><input type="text" id="col-node" placeholder="输入节点词…" style="width:130px">
+        <label>窗口 ±</label><input type="number" id="col-window" value="5" min="1" max="15" style="width:50px">
+        <label>最低共现</label><input type="number" id="col-minfreq" value="2" min="1" style="width:50px">
+        <div class="sep"></div>
+        <button class="btn primary" onclick="runCollocates()">分析</button>
+        <button class="btn" onclick="exportCollocates()">导出</button>
+        <span class="badge" id="col-count">0 个搭配</span>
+      </div>
+      <div class="table-wrap">
+        <div class="empty-state" id="col-empty"><div class="big">⬡</div><p>输入节点词进行搭配分析</p></div>
+        <table id="col-table" style="display:none">
+          <thead><tr><th data-col="rank">排名</th><th data-col="word">搭配词</th><th data-col="freq">共现频次</th><th data-col="nodeFreq">节点词频</th><th data-col="wordFreq">词频</th><th data-col="mi">MI 值</th><th data-col="tscore">T-score</th><th data-col="ll">对数似然</th></tr></thead>
+          <tbody id="col-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ⑤ Stats -->
+    <div class="panel" id="panel-stats">
+      <div class="panel-bar">
+        <span style="font-size:12px;color:var(--label-2)">已选语料统计概览</span>
+        <div class="sep"></div>
+        <button class="btn" onclick="exportStats()">导出报告</button>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="empty-state" style="grid-column:1/-1"><div class="big">∑</div><p>勾选语料后查看统计</p></div>
+      </div>
+    </div>
+
+    <!-- ⑥ Viz -->
+    <div class="panel" id="panel-viz">
+      <div class="panel-bar">
+        <label>图表类型</label>
+        <select id="viz-type" onchange="renderChart()">
+          <option value="freqbar">词频条形图 (Top N)</option>
+          <option value="zipf">Zipf 定律（双对数）</option>
+          <option value="ttr">词汇丰富度曲线</option>
+          <option value="sentlen">句长分布</option>
+        </select>
+        <label>数量</label><input type="number" id="viz-topn" value="30" min="5" max="200" style="width:58px">
+        <div class="sep"></div>
+        <button class="btn primary" onclick="renderChart()">绘制</button>
+      </div>
+      <div id="chart-container">
+        <div id="chart-title"></div>
+        <canvas id="chart-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="statusbar">
+  <div class="sb-item">文件 <span id="sb-files">0/0</span></div>
+  <div class="sb-item">词形 <span id="sb-tokens">0</span></div>
+  <div class="sb-item">词型 <span id="sb-types">0</span></div>
+  <div id="sb-msg"></div>
+</div>
+
+<!-- Preview Modal -->
+<div id="preview-modal" onclick="if(event.target===this)closePreview()">
+  <div id="preview-box">
+    <div id="preview-header">
+      <div><div id="preview-title">预览</div><div id="preview-meta"></div></div>
+      <button id="preview-close" onclick="closePreview()">✕</button>
+    </div>
+    <div id="preview-tabs">
+      <div class="ptab active" data-ptab="tokens" onclick="switchPTab(this)">分词结果</div>
+      <div class="ptab" data-ptab="raw" onclick="switchPTab(this)">原始文本</div>
+      <div class="ptab" data-ptab="freq" onclick="switchPTab(this)">本文词频</div>
+    </div>
+    <div id="preview-body"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const STOP_ZH=new Set('的了在是我有和就不都一上他来到说国时大地为子中你说生国年着就那和要她出也得里后自以会家可下而过天去能对小多然于心学么之都好看起发当没成只如事把还用第样道想作种开美总从无情己面最女但现前些所同日手又行意动方期它头经长儿回位分爱老因很给名法间斯知世什两次使身者被高已亲其进此话关工地年发后总已而以这个'.split(''));
+const STOP_EN=new Set('a an the is are was were be been have has had do does did will would could should may might i me my we our you your he him his she her it its they them their this that these those am and but if or as at by for with about between into through after before from up down in on off so than too very just once here there when where how all both each few more most other some such no nor not only own same then what which who whom'.split(' '));
+
+let SEG_MODE='word';
+const SEG_OK=typeof Intl!=='undefined'&&typeof Intl.Segmenter==='function';
+
+function setSegMode(m){
+  SEG_MODE=m;
+  document.getElementById('mode-word').classList.toggle('active',m==='word');
+  document.getElementById('mode-char').classList.toggle('active',m==='char');
+  for(const f of engine.files)f.tokens=Tokenizer.tokenize(f.content);
+  engine._rebuildSelected();renderFileList();updateStatusBar();
+  if(engine.files.length)msg('分词模式已切换，语料已重新处理');
+}
+
+// ── Mini Chinese Word Dictionary (FMM fallback) ──────────
+const ZH_WORDS = new Set((
+'我们 你们 他们 她们 它们 自己 大家 什么 怎么 因为 所以 但是 虽然 如果 已经 可以 应该 需要 认为 知道 看到 听到 告诉 感觉 觉得 希望 相信 表示 通过 利用 根据 对于 关于 由于 除了 不仅 同时 另外 首先 其次 最后 总之 例如 比如 即使 其中 因此 然而 不过 而且 并且 或者 还是 也就 都是 就是 还有 只有 只是 没有 不是 可能 必须 一定 非常 特别 主要 基本 一般 具体 相关 重要 不同 相同 各种 很多 一些 这些 那些 很少 大量 一直 一样 一起 一下 一种 以上 以下 以及 之后 之前 之间 之中 方面 情况 过程 结果 方式 方法 内容 作用 问题 原因 目的 意义 条件 基础 系统 结构 特点 特征 功能 部分 方向 关系 影响 效果 程度 范围 形式 水平 标准 原则 规律 规则 目标 任务 要求 效率 质量 数量 比例 成分 要素 因素 背景 环境 阶段 联系 发展 变化 改变 提高 增加 减少 完成 实现 建立 形成 产生 出现 存在 表现 说明 解释 分析 研究 探讨 讨论 比较 评价 介绍 描述 总结 应用 实践 操作 处理 解决 面对 涉及 包括 具有 表达 体现 反映 强调 注意 考虑 理解 掌握 学习 教学 学生 老师 学校 课程 课题 专业 知识 能力 经验 技能 思维 文章 语言 词语 词汇 句子 文字 汉字 意思 形式 语法 语境 语义 语用 语料 语体 语篇 文本 话语 交际 沟通 思想 观点 角度 立场 态度 看法 意见 建议 价值 重要 必要 合理 正确 有效 适当 适合 可行 人们 社会 国家 政府 经济 文化 历史 科学 技术 自然 人类 世界 生活 工作 时间 地方 地区 城市 农村 农业 工业 教育 医疗 文艺 体育 艺术 音乐 电影 电视 电话 电脑 网络 信息 数据 资料 文件 报告 论文 书籍 杂志 报纸 图书 出版 媒体 新闻 广播 记者 作者 读者 学者 专家 院士 教授 博士 硕士 工作 生产 管理 领导 政策 计划 方案 措施 制度 机制 体制 改革 创新 建设 进步 完善 优化 提升 推动 促进 加强 深化 扩大 改善 克服 消除 避免 防止 保护 支持 鼓励 实现 达到 获得 取得 拥有 了解 认识 评估 设计 制定 实施 执行 监督 反馈 语言学 语料库 词汇学 句法学 语义学 语用学 语音学 形态学 修辞学 话语分析 文本分析 内容分析 语言能力 交际能力 母语者 二语者 外语学 语言习得 第二语言 语言教学 教学方法 教学内容 教学目标 教学设计 教材编写 课程设计 测试评估 学习策略 认知语言 应用语言 计算语言 社会语言 心理语言 篇章结构 话轮结构 语篇衔接 词汇密度 词频统计 搭配词 共现频率 信息结构 词汇语法 系统功能 学习者 研究者 被试者 参与者 调查者 受试者 数据库 研究方法 研究目的 研究意义 研究背景 研究问题 研究假设 研究结果 研究结论 实验设计 实验方法 调查方法 问卷调查 访谈法 观察法 案例分析 对比分析 定量研究 定性研究 混合研究 理论框架 概念框架 分析框架 统计分析 数据分析 互动分析 会话分析 大学生 研究生 本科生 博士生 中学生 小学生 留学生 信息技术 人工智能 机器学习 深度学习 自然语言 语言处理 文字识别 语音识别 语音合成 机器翻译 计算机 互联网 数字媒体 大数据 云计算 文化交流 国际交流 文化背景 社会背景 历史背景 文化差异 文化认同 民族文化 传统文化 现代文化'
+).trim().split(/\s+/));
+
+class Tokenizer{
+  static isChinese(t){return(t.match(/[\u4e00-\u9fff]/g)||[]).length>t.length*.15}
+
+  // Word-level: Intl.Segmenter primary, FMM fallback for Chinese
+  static tokenizeWord(text){
+    if(SEG_OK){
+      // Try Intl.Segmenter first
+      try{
+        const seg=new Intl.Segmenter(this.isChinese(text)?'zh':'en',{granularity:'word'});
+        const r=[];
+        for(const{segment,index,isWordLike}of seg.segment(text)){
+          if(!isWordLike)continue;const t=segment.trim();if(!t)continue;
+          r.push({token:t.toLowerCase(),raw:t,start:index,end:index+segment.length});
+        }
+        // Quality check: if >70% of Chinese tokens are single chars, fall back to FMM
+        const zhToks=r.filter(t=>/[\u4e00-\u9fff]/.test(t.token));
+        const singleChar=zhToks.filter(t=>t.token.length===1).length;
+        if(zhToks.length===0||singleChar/zhToks.length<0.7)return r;
+        // Fall through to FMM
+      }catch(e){}
+    }
+    // FMM fallback
+    return this.tokenizeFMM(text);
+  }
+
+  // Forward Maximum Matching
+  static tokenizeFMM(text){
+    const MAX=5,r=[];
+    const parts=text.split(/([\u4e00-\u9fff\u3400-\u4dbf]+)/);
+    let pos=0;
+    for(const part of parts){
+      if(!part){pos+=part.length;continue;}
+      if(/[\u4e00-\u9fff]/.test(part)){
+        let i=0;
+        while(i<part.length){
+          let matched=null;
+          for(let len=Math.min(MAX,part.length-i);len>=2;len--){
+            if(ZH_WORDS.has(part.slice(i,i+len))){matched=part.slice(i,i+len);break;}
+          }
+          const w=matched||part[i],abs=pos+i;
+          r.push({token:w,raw:w,start:abs,end:abs+w.length});
+          i+=w.length;
+        }
+      }else{
+        const re=/[a-zA-Z0-9]+(?:['\-][a-zA-Z0-9]+)*/g;let m;
+        while((m=re.exec(part))!==null)
+          r.push({token:m[0].toLowerCase(),raw:m[0],start:pos+m.index,end:pos+m.index+m[0].length});
+      }
+      pos+=part.length;
+    }
+    return r;
+  }
+
+  static tokenizeChar(text){
+    const r=[],re=/[\u4e00-\u9fff\u3400-\u4dbf]|[a-zA-Z0-9]+(?:['\-][a-zA-Z0-9]+)*/g;let m;
+    while((m=re.exec(text))!==null)r.push({token:m[0].toLowerCase(),raw:m[0],start:m.index,end:m.index+m[0].length});
+    return r;
+  }
+
+  static tokenize(text){return SEG_MODE==='word'?this.tokenizeWord(text):this.tokenizeChar(text)}
+  static classify(t){return/^[0-9]+([.,][0-9]+)?$/.test(t)?'num':/[\u4e00-\u9fff]/.test(t)?'zh':'en'}
+  static sentences(t){return t.split(/[。！？\n]|[!?]|(?<=\w)\.(?=\s|$)/).map(s=>s.trim()).filter(s=>s.length>1)}
+  static isStop(t){return STOP_ZH.has(t)||STOP_EN.has(t)}
+}
+
+class CorpusEngine{
+  constructor(){this.files=[];this.selected=new Set();this.allTokens=[];this.freqMap={};this.totalChars=0;this.totalTokens=0;this.typeCount=0}
+  clear(){this.files=[];this.selected=new Set();this._rebuildSelected()}
+  addFile(name,content){const idx=this.files.length;this.files.push({name,content,tokens:Tokenizer.tokenize(content),chars:content.length});this.selected.add(idx);this._rebuildSelected()}
+  removeFile(idx){this.files.splice(idx,1);const s=new Set();for(const x of this.selected){if(x<idx)s.add(x);else if(x>idx)s.add(x-1)}this.selected=s;this._rebuildSelected()}
+  toggle(idx){this.selected.has(idx)?this.selected.delete(idx):this.selected.add(idx);this._rebuildSelected()}
+  selectAll(){this.files.forEach((_,i)=>this.selected.add(i));this._rebuildSelected()}
+  selectNone(){this.selected.clear();this._rebuildSelected()}
+  isAllSel(){return this.files.length>0&&this.selected.size===this.files.length}
+  _rebuildSelected(){
+    this.allTokens=[];this.freqMap={};this.totalChars=0;
+    for(const i of this.selected){const f=this.files[i];if(!f)continue;this.allTokens.push(...f.tokens);this.totalChars+=f.chars}
+    this.totalTokens=this.allTokens.length;
+    for(const t of this.allTokens)this.freqMap[t.token]=(this.freqMap[t.token]||0)+1;
+    this.typeCount=Object.keys(this.freqMap).length;
+  }
+  getWordList(minFreq=1,sw=false){
+    let cum=0;const tot=this.totalTokens;
+    const s=Object.entries(this.freqMap).filter(([w,c])=>c>=minFreq&&(!sw||!Tokenizer.isStop(w))).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+    return s.map(([word,freq],i)=>{cum+=freq;return{rank:i+1,word,freq,pct:(freq/tot*100).toFixed(3),cum:(cum/tot*100).toFixed(2)}});
+  }
+  getKwic(q,win=5,regex=false,cs=false){
+    const tokens=this.allTokens,n=tokens.length,res=[];
+    let test;if(regex){const re=new RegExp(q,cs?'':'i');test=t=>re.test(t.token)}else{const qv=cs?q:q.toLowerCase();test=t=>(cs?t.raw:t.token)===qv}
+    for(let i=0;i<n;i++){if(!test(tokens[i]))continue;const l=tokens.slice(Math.max(0,i-win),i).map(t=>t.raw),r=tokens.slice(i+1,Math.min(n,i+win+1)).map(t=>t.raw);res.push({idx:i,left:l.join(' '),node:tokens[i].raw,right:r.join(' '),l1:l[l.length-1]||'',r1:r[0]||''})}
+    return res;
+  }
+  getNgram(n=2,min=2){
+    const freq={},toks=this.allTokens;
+    for(let i=0;i<=toks.length-n;i++){const g=toks.slice(i,i+n).map(t=>t.raw).join(' ');freq[g]=(freq[g]||0)+1}
+    const tot=Object.values(freq).reduce((a,b)=>a+b,0);
+    return Object.entries(freq).filter(([,c])=>c>=min).sort((a,b)=>b[1]-a[1]).map(([gram,f],i)=>({rank:i+1,gram,freq:f,pct:(f/tot*100).toFixed(3)}));
+  }
+  getCollocates(node,win=5,min=2){
+    const toks=this.allTokens,n=toks.length,nw=node.toLowerCase();
+    const nFq=this.freqMap[nw]||0;if(!nFq)return[];
+    const cf={};
+    for(let i=0;i<n;i++){if(toks[i].token!==nw)continue;for(let j=Math.max(0,i-win);j<=Math.min(n-1,i+win);j++){if(j===i)continue;cf[toks[j].token]=(cf[toks[j].token]||0)+1}}
+    const res=[];
+    for(const[word,obs]of Object.entries(cf)){if(obs<min)continue;const wFq=this.freqMap[word]||0,exp=(nFq*wFq*win*2)/n;const mi=exp>0?Math.log2(obs/exp):-999,ts=exp>0?(obs-exp)/Math.sqrt(obs):0,ll=obs>0&&exp>0?2*(obs*Math.log(obs/exp)-(obs-exp)):0;res.push({word,freq:obs,nodeFreq:nFq,wordFreq:wFq,mi,tscore:ts,ll})}
+    return res.sort((a,b)=>b.freq-a.freq).map((r,i)=>({...r,rank:i+1}));
+  }
+  getStats(){
+    const tot=this.totalTokens,types=this.typeCount,chars=this.totalChars;
+    const sels=[...this.selected].map(i=>this.files[i]).filter(Boolean);
+    const sents=sels.reduce((a,f)=>a+Tokenizer.sentences(f.content).length,0);
+    const hapax=Object.values(this.freqMap).filter(f=>f===1).length;
+    const avgWL=tot>0?(this.allTokens.reduce((a,t)=>a+t.token.length,0)/tot).toFixed(2):'—';
+    const ttr=tot>0?(types/tot*100).toFixed(2):'—';
+    // Standard TTR: use chunk size of min(500, floor(tot/3)) so it works for smaller corpora
+    const chunkSize=tot>=300?Math.min(500,Math.floor(tot/3)):0;
+    const sttr=chunkSize>0?(()=>{
+      let c=[],i=0;
+      while(i+chunkSize<=tot){
+        const ch=this.allTokens.slice(i,i+chunkSize);
+        c.push(new Set(ch.map(t=>t.token)).size/chunkSize);
+        i+=chunkSize;
+      }
+      return(c.reduce((a,b)=>a+b,0)/c.length*100).toFixed(2);
+    })():'—（语料不足300词）';
+    return{tot,types,chars,sents,avgSL:sents>0?(tot/sents).toFixed(1):'—',hapax,avgWL,ttr,sttr};
+  }
+  getTtrCurve(step=100){const p=[],s=new Set();for(let i=0;i<this.allTokens.length;i+=step){s.add(this.allTokens[i].token);p.push({x:i+step,y:s.size/(i+step)})}return p}
+  getSentLengths(){const d={};for(const i of this.selected){const f=this.files[i];if(!f)continue;for(const s of Tokenizer.sentences(f.content)){const l=Tokenizer.tokenize(s).length;if(l>0&&l<=100)d[l]=(d[l]||0)+1}}return Object.entries(d).sort((a,b)=>+a[0]-+b[0]).map(([l,c])=>({x:+l,y:c}))}
+}
+
+// Chart
+const Chart={
+  draw(canvas,type,data,title=''){
+    const ctx=canvas.getContext('2d'),dpr=devicePixelRatio||1;
+    canvas.width=canvas.offsetWidth*dpr;canvas.height=canvas.offsetHeight*dpr;
+    ctx.scale(dpr,dpr);const w=canvas.offsetWidth,h=canvas.offsetHeight;
+    ctx.clearRect(0,0,w,h);const pad={l:68,r:24,t:36,b:52},pw=w-pad.l-pad.r,ph=h-pad.t-pad.b;
+    ctx.fillStyle='#131118';ctx.fillRect(0,0,w,h);
+    const grid=(xT,yT,xMn,xMx,yMn,yMx,lx,ly)=>{
+      const xP=x=>pad.l+(lx?Math.log10(x/xMn)/Math.log10(xMx/xMn):(x-xMn)/(xMx-xMn))*pw;
+      const yP=y=>pad.t+ph-(ly?Math.log10(y/yMn)/Math.log10(yMx/yMn):(y-yMn)/(yMx-yMn))*ph;
+      ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;
+      for(const y of yT){const p=yP(y);ctx.beginPath();ctx.moveTo(pad.l,p);ctx.lineTo(pad.l+pw,p);ctx.stroke()}
+      for(const x of xT){const p=xP(x);ctx.beginPath();ctx.moveTo(p,pad.t);ctx.lineTo(p,pad.t+ph);ctx.stroke()}
+      ctx.fillStyle='rgba(237,232,223,.28)';ctx.font='10px -apple-system,sans-serif';
+      ctx.textAlign='right';for(const y of yT)ctx.fillText(y>=1000?(y/1000).toFixed(0)+'k':y,pad.l-6,yP(y)+4);
+      ctx.textAlign='center';for(const x of xT)ctx.fillText(x>=1000?(x/1000).toFixed(0)+'k':x,xP(x),pad.t+ph+18);
+      return{xP,yP};
+    };
+    if(type==='freqbar'&&data.length){
+      const mF=data[0].freq,yT=Array.from({length:6},(_,i)=>Math.round(mF/5*i));
+      const xT=data.filter((_,i)=>i%Math.ceil(data.length/8)===0).map(d=>d.rank);
+      const{xP,yP}=grid(xT,yT,1,data.length,0,mF*1.1,false,false);
+      const bw=Math.max(2,pw/data.length-1);
+      for(const d of data){const x=xP(d.rank)-bw/2,y=yP(d.freq),bh=pad.t+ph-y,a=.3+.7*(1-d.rank/data.length);ctx.fillStyle=`rgba(0,122,255,${a})`;ctx.fillRect(x,y,bw,bh)}
+    }else if(type==='zipf'&&data.length){
+      const mR=1,xMx=data.length,mF=data[data.length-1].freq,xF=data[0].freq;
+      const lR=[1,2,5,10,50,100,500].filter(v=>v<=xMx),lF=[1,2,5,10,50,100,1000].filter(v=>v>=mF&&v<=xF);
+      const{xP,yP}=grid(lR,lF,mR,xMx,Math.max(.5,mF),xF*2,true,true);
+      ctx.strokeStyle='#007AFF';ctx.lineWidth=1.5;ctx.beginPath();let f=true;
+      for(const d of data){if(d.rank<1||d.freq<1)continue;const p=xP(d.rank),q=yP(d.freq);f?ctx.moveTo(p,q):ctx.lineTo(p,q);f=false}ctx.stroke();
+      ctx.strokeStyle='#34C759';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();f=true;
+      for(const d of data){if(d.rank<1)continue;const idealF=data[0].freq/d.rank;if(idealF<.5)break;const p=xP(d.rank),q=yP(idealF);f?ctx.moveTo(p,q):ctx.lineTo(p,q);f=false}ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#007AFF';ctx.fillRect(pad.l+10,pad.t+10,18,2);ctx.fillStyle='rgba(60,60,67,.55)';ctx.font='11px -apple-system,sans-serif';ctx.textAlign='left';ctx.fillText('实际分布',pad.l+32,pad.t+14);
+      ctx.fillStyle='#34C759';ctx.fillRect(pad.l+10,pad.t+26,18,2);ctx.fillStyle='rgba(60,60,67,.55)';ctx.fillText('理想 Zipf',pad.l+32,pad.t+30);
+    }else if(type==='ttr'&&data.length){
+      const mX=data[data.length-1].x,mY=Math.max(...data.map(d=>d.y)),mnY=Math.min(...data.map(d=>d.y));
+      const xT=Array.from({length:6},(_,i)=>Math.round(mX/5*i)),yS=(mY-mnY)/4;
+      const yT=Array.from({length:5},(_,i)=>+(mnY+yS*i).toFixed(3));
+      const{xP,yP}=grid(xT,yT,0,mX,mnY-yS*.1,mY+yS*.1,false,false);
+      ctx.strokeStyle='#AF52DE';ctx.lineWidth=1.5;ctx.beginPath();let f=true;
+      for(const d of data){const p=xP(d.x),q=yP(d.y);f?ctx.moveTo(p,q):ctx.lineTo(p,q);f=false}ctx.stroke();
+    }else if(type==='sentlen'&&data.length){
+      const mX=Math.max(...data.map(d=>d.x)),mY=Math.max(...data.map(d=>d.y));
+      const xT=Array.from({length:8},(_,i)=>Math.round(mX/7*i)),yT=Array.from({length:6},(_,i)=>Math.round(mY/5*i));
+      const{xP,yP}=grid(xT,yT,0,mX+2,0,mY*1.1,false,false);
+      const bw=Math.max(3,pw/(mX+2)-1);
+      for(const d of data){const x=xP(d.x)-bw/2,y=yP(d.y),bh=pad.t+ph-y;ctx.fillStyle='rgba(123,156,244,.55)';ctx.fillRect(x,y,bw,bh)}
+    }
+    ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ph);ctx.lineTo(pad.l+pw,pad.t+ph);ctx.stroke();
+    ctx.fillStyle='rgba(237,232,223,.3)';ctx.font='11px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(title,w/2,18);
+  }
+};
+
+const engine=new CorpusEngine();
+let wlData=[],kwicData=[],ngData=[],colData=[];
+let wlSortCol='rank',wlSortAsc=true,colSortCol='freq',colSortAsc=false,activeTab='wordlist';
+
+function msg(text,color='#34C759'){const el=document.getElementById('sb-msg');el.textContent=text;el.style.color=color;clearTimeout(el._t);el._t=setTimeout(()=>el.textContent='',3000)}
+
+function updateStatusBar(){
+  const sel=engine.selected.size,all=engine.files.length;
+  document.getElementById('sb-files').textContent=`${sel}/${all}`;
+  document.getElementById('sb-tokens').textContent=engine.totalTokens.toLocaleString();
+  document.getElementById('sb-types').textContent=engine.typeCount.toLocaleString();
+  document.getElementById('ss-files').textContent=`${sel} / ${all}`;
+  document.getElementById('ss-tokens').textContent=engine.totalTokens.toLocaleString();
+  document.getElementById('ss-types').textContent=engine.typeCount.toLocaleString();
+  document.getElementById('ss-ttr').textContent=engine.totalTokens>0?(engine.typeCount/engine.totalTokens*100).toFixed(2)+'%':'—';
+  document.getElementById('status-dot').className=sel>0?'active':'';
+  document.getElementById('corpus-pill').textContent=sel>0?`${engine.totalTokens.toLocaleString()} 词形 · ${engine.typeCount.toLocaleString()} 词型`:'无语料';
+  document.getElementById('sel-count').textContent=`${sel} / ${all}`;
+  const cb=document.getElementById('sel-all-cb');cb.checked=engine.isAllSel();cb.indeterminate=sel>0&&!engine.isAllSel();
+  const notice=document.getElementById('sel-notice');
+  if(sel<all&&sel>0){notice.textContent=`当前分析 ${sel} 个文件（共 ${all} 个）`;notice.classList.add('show')}
+  else notice.classList.remove('show');
+}
+
+let previewIdx=-1;
+function renderFileList(){
+  const list=document.getElementById('file-list');list.innerHTML='';
+  if(!engine.files.length){document.getElementById('drop-zone').style.display='block';return}
+  document.getElementById('drop-zone').style.display='none';
+  engine.files.forEach((f,i)=>{
+    const sel=engine.selected.has(i);
+    const div=document.createElement('div');
+    div.className='file-item'+(sel?' selected':'')+(i===previewIdx?' previewing':'');
+    // Checkbox
+    const cb=document.createElement('input');cb.type='checkbox';cb.className='file-cb';cb.checked=sel;
+    cb.onclick=e=>{e.stopPropagation();engine.toggle(i);renderFileList();updateStatusBar()};
+    // Info
+    const info=document.createElement('div');info.className='file-info';
+    const badge=`<span class="seg-badge ${SEG_MODE}">${SEG_MODE==='word'?'词':'字'}</span>`;
+    info.innerHTML=`<div class="file-name" title="${f.name}">${escHtml(f.name)}${badge}</div><div class="file-meta">${f.tokens.length.toLocaleString()} 词 · ${f.chars.toLocaleString()} 字符</div>`;
+    // Actions
+    const acts=document.createElement('div');acts.className='file-actions';
+    const pb=document.createElement('button');pb.className='file-btn';pb.title='预览分词';pb.textContent='⊙';pb.onclick=e=>{e.stopPropagation();showPreview(i)};
+    const rb=document.createElement('button');rb.className='file-btn danger';rb.title='移除';rb.textContent='✕';rb.onclick=e=>{e.stopPropagation();engine.removeFile(i);if(previewIdx===i)closePreview();else if(previewIdx>i)previewIdx--;renderFileList();updateStatusBar();msg('已移除：'+f.name)};
+    acts.appendChild(pb);acts.appendChild(rb);
+    div.appendChild(cb);div.appendChild(info);div.appendChild(acts);
+    div.onclick=()=>showPreview(i);
+    list.appendChild(div);
+  });
+}
+
+function toggleSelectAll(){engine.isAllSel()?engine.selectNone():engine.selectAll();renderFileList();updateStatusBar()}
+
+async function loadFiles(){
+  let files=[];
+  if(typeof window.lexaraAPI!=='undefined')files=await window.lexaraAPI.openFiles();
+  else files=await browserFileOpen();
+  if(!files||!files.length)return;
+  for(const f of files){if(f.error){msg('读取失败：'+f.name,'#FF3B30');continue}engine.addFile(f.name,f.content);msg('已载入：'+f.name)}
+  renderFileList();updateStatusBar();
+}
+function browserFileOpen(){return new Promise(resolve=>{const inp=document.createElement('input');inp.type='file';inp.multiple=true;inp.accept='.txt,.csv,.tsv,.text';inp.onchange=()=>Promise.all(Array.from(inp.files).map(f=>new Promise(res=>{const r=new FileReader();r.onload=e=>res({name:f.name,content:e.target.result});r.readAsText(f,'utf-8')}))).then(resolve);inp.click()})}
+
+const dz=document.getElementById('drop-zone');
+document.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over')});
+document.addEventListener('dragleave',e=>{if(!e.relatedTarget||!document.contains(e.relatedTarget))dz.classList.remove('drag-over')});
+document.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('drag-over');
+  const files=Array.from(e.dataTransfer.files).filter(f=>/\.(txt|csv|tsv|text)$/i.test(f.name));
+  if(!files.length)return;
+  Promise.all(files.map(f=>new Promise(res=>{const r=new FileReader();r.onload=e=>res({name:f.name,content:e.target.result});r.readAsText(f,'utf-8')}))).then(loaded=>{for(const f of loaded)engine.addFile(f.name,f.content);renderFileList();updateStatusBar();msg(`载入 ${loaded.length} 个文件`)});
+});
+if(typeof window.lexaraAPI!=='undefined'){window.lexaraAPI.onMenuOpenFiles(()=>loadFiles());window.lexaraAPI.onMenuClear(()=>{engine.clear();renderFileList();updateStatusBar();msg('已清空语料')})}
+
+document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active');activeTab=t.dataset.tab;if(activeTab==='stats')renderStats();if(activeTab==='viz')renderChart()})});
+
+function guard(){if(engine.selected.size===0){msg('请先勾选至少一个文件','#FF9500');return false}return true}
+
+// Word List
+function runWordList(){if(!guard())return;wlData=engine.getWordList(+document.getElementById('wl-minfreq').value||1,document.getElementById('wl-stopwords').checked);wlSortCol='rank';wlSortAsc=true;renderWL();document.getElementById('wl-count').textContent=wlData.length.toLocaleString()+' 词';msg(`词表：${wlData.length.toLocaleString()} 词型`)}
+function renderWL(){const bd=document.getElementById('wl-body'),tb=document.getElementById('wl-table'),em=document.getElementById('wl-empty');if(!wlData.length){tb.style.display='none';em.style.display='flex';return}tb.style.display='';em.style.display='none';const s=[...wlData].sort((a,b)=>{let va=a[wlSortCol],vb=b[wlSortCol];return typeof va==='string'?(wlSortAsc?va.localeCompare(vb):vb.localeCompare(va)):(wlSortAsc?va-vb:vb-va)});bd.innerHTML=s.slice(0,5000).map(d=>`<tr><td class="num">${d.rank}</td><td class="word">${escHtml(d.word)}</td><td class="num">${d.freq.toLocaleString()}</td><td class="num">${d.pct}</td><td class="num">${d.cum}</td></tr>`).join('')}
+document.querySelectorAll('#wl-table th[data-col]').forEach(th=>{th.addEventListener('click',()=>{if(wlSortCol===th.dataset.col)wlSortAsc=!wlSortAsc;else{wlSortCol=th.dataset.col;wlSortAsc=th.dataset.col==='word'}document.querySelectorAll('#wl-table th').forEach(x=>x.className='');th.className=wlSortAsc?'sort-asc':'sort-desc';renderWL()})});
+function exportWordList(){if(!wlData.length){msg('无数据','#FF9500');return}doExport('lexara_wordlist.csv','排名,词形,频次,占比%,累积%\n'+wlData.map(d=>`${d.rank},${d.word},${d.freq},${d.pct},${d.cum}`).join('\n'))}
+
+// KWIC
+function runKwic(){const q=document.getElementById('kwic-query').value.trim();if(!q){msg('请输入搜索词','#FF9500');return}if(!guard())return;try{kwicData=engine.getKwic(q,+document.getElementById('kwic-window').value||5,document.getElementById('kwic-regex').checked,document.getElementById('kwic-case').checked)}catch(e){msg('正则错误','#FF3B30');return}sortKwic();document.getElementById('kwic-count').textContent=kwicData.length.toLocaleString()+' 条';msg(`找到 ${kwicData.length} 条`)}
+document.getElementById('kwic-query').addEventListener('keydown',e=>{if(e.key==='Enter')runKwic()});
+function sortKwic(){const by=document.getElementById('kwic-sort').value;let d=[...kwicData];if(by==='l1')d.sort((a,b)=>a.l1.localeCompare(b.l1));else if(by==='r1')d.sort((a,b)=>a.r1.localeCompare(b.r1));else if(by==='node')d.sort((a,b)=>a.node.localeCompare(b.node));const bd=document.getElementById('kwic-body'),tb=document.getElementById('kwic-table'),em=document.getElementById('kwic-empty');if(!d.length){tb.style.display='none';em.style.display='flex';return}tb.style.display='';em.style.display='none';bd.innerHTML=d.slice(0,2000).map((x,i)=>`<tr><td class="num">${i+1}</td><td class="ctx">${escHtml(x.left)}</td><td class="node">${escHtml(x.node)}</td><td class="ctx-r">${escHtml(x.right)}</td></tr>`).join('')}
+document.getElementById('kwic-sort').addEventListener('change',sortKwic);
+function exportKwic(){if(!kwicData.length){msg('无数据','#FF9500');return}doExport('lexara_kwic.csv','序号,左侧语境,节点词,右侧语境\n'+kwicData.map((d,i)=>`${i+1},"${d.left}",${d.node},"${d.right}"`).join('\n'))}
+
+// N-Gram
+function runNgram(){if(!guard())return;ngData=engine.getNgram(+document.getElementById('ng-n').value,+document.getElementById('ng-minfreq').value||2);const bd=document.getElementById('ng-body'),tb=document.getElementById('ng-table'),em=document.getElementById('ng-empty');document.getElementById('ng-count').textContent=ngData.length.toLocaleString()+' 条';if(!ngData.length){tb.style.display='none';em.style.display='flex';em.querySelector('p').textContent='无满足条件的结果';return}tb.style.display='';em.style.display='none';bd.innerHTML=ngData.slice(0,3000).map(d=>`<tr><td class="num">${d.rank}</td><td class="word">${escHtml(d.gram)}</td><td class="num">${d.freq.toLocaleString()}</td><td class="num">${d.pct}</td></tr>`).join('');msg(`N-Gram：${ngData.length.toLocaleString()} 条`)}
+function exportNgram(){if(!ngData.length){msg('无数据','#FF9500');return}doExport('lexara_ngram.csv','排名,N-Gram,频次,占比%\n'+ngData.map(d=>`${d.rank},"${d.gram}",${d.freq},${d.pct}`).join('\n'))}
+
+// Collocates
+function runCollocates(){const nd=document.getElementById('col-node').value.trim();if(!nd){msg('请输入节点词','#FF9500');return}if(!guard())return;colData=engine.getCollocates(nd,+document.getElementById('col-window').value||5,+document.getElementById('col-minfreq').value||2);renderCol();document.getElementById('col-count').textContent=colData.length+' 个搭配';msg(`搭配分析：${colData.length} 个`)}
+document.getElementById('col-node').addEventListener('keydown',e=>{if(e.key==='Enter')runCollocates()});
+function renderCol(){const bd=document.getElementById('col-body'),tb=document.getElementById('col-table'),em=document.getElementById('col-empty');if(!colData.length){tb.style.display='none';em.style.display='flex';return}tb.style.display='';em.style.display='none';const s=[...colData].sort((a,b)=>{let va=a[colSortCol],vb=b[colSortCol];return typeof va==='string'?(colSortAsc?va.localeCompare(vb):vb.localeCompare(va)):(colSortAsc?va-vb:vb-va)});bd.innerHTML=s.slice(0,2000).map((d,i)=>`<tr><td class="num">${i+1}</td><td class="word">${escHtml(d.word)}</td><td class="num">${d.freq}</td><td class="num">${d.nodeFreq}</td><td class="num">${d.wordFreq}</td><td class="num" style="color:${d.mi>3?'var(--green)':d.mi<0?'var(--red)':'var(--blue)'}">${d.mi.toFixed(3)}</td><td class="num">${d.tscore.toFixed(3)}</td><td class="num">${d.ll.toFixed(2)}</td></tr>`).join('')}
+document.querySelectorAll('#col-table th[data-col]').forEach(th=>{th.addEventListener('click',()=>{if(colSortCol===th.dataset.col)colSortAsc=!colSortAsc;else{colSortCol=th.dataset.col;colSortAsc=false}document.querySelectorAll('#col-table th').forEach(x=>x.className='');th.className=colSortAsc?'sort-asc':'sort-desc';renderCol()})});
+function exportCollocates(){if(!colData.length){msg('无数据','#FF9500');return}doExport('lexara_collocates.csv','排名,搭配词,共现频次,节点词频,词频,MI值,T-score,对数似然\n'+colData.map((d,i)=>`${i+1},${d.word},${d.freq},${d.nodeFreq},${d.wordFreq},${d.mi.toFixed(3)},${d.tscore.toFixed(3)},${d.ll.toFixed(2)}`).join('\n'))}
+
+// Stats
+function renderStats(){const grid=document.getElementById('stats-grid');if(!guard()){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="big">∑</div><p>请先勾选语料文件</p></div>';return}const s=engine.getStats();const cards=[{l:'总词形数 (Tokens)',v:s.tot.toLocaleString(),s:'语料库规模',c:'var(--gold)'},{l:'词型数 (Types)',v:s.types.toLocaleString(),s:'不重复词语数量',c:'var(--blue)'},{l:'类符形符比 TTR',v:s.ttr+'%',s:'词汇丰富度',c:'var(--purple)'},{l:'标准 TTR',v:s.sttr.includes('—')?'—':s.sttr+'%',s:'每1000词段均值',c:'var(--pink)'},{l:'总字符数',v:s.chars.toLocaleString(),s:'含空格标点',c:'var(--teal)'},{l:'句子数',v:s.sents.toLocaleString(),s:'估算句数',c:'var(--green)'},{l:'平均句长',v:s.avgSL,s:'每句平均词数',c:'var(--orange)'},{l:'平均词长',v:s.avgWL,s:'每词平均字符数',c:'var(--gold-2)'},{l:'单次词 (Hapax)',v:s.hapax.toLocaleString(),s:'仅出现一次',c:'var(--red)'},{l:'单次词比例',v:s.types>0?(s.hapax/s.types*100).toFixed(1)+'%':'—',s:'占词型数比例',c:'var(--indigo)'}];grid.innerHTML=cards.map(c=>`<div class="stat-card" style="border-top-color:${c.c}"><div class="sc-label">${c.l}</div><div class="sc-value" style="color:${c.c}">${c.v}</div><div class="sc-sub">${c.s}</div></div>`).join('')}
+function exportStats(){if(!guard())return;const s=engine.getStats();doExport('lexara_stats.txt',`析言 LEXARA — 统计报告\n${'='.repeat(36)}\n已选文件: ${engine.selected.size}\n总词形数: ${s.tot}\n词型数: ${s.types}\nTTR: ${s.ttr}%\n标准TTR: ${s.sttr}%\n总字符数: ${s.chars}\n句子数: ${s.sents}\n平均句长: ${s.avgSL}\n平均词长: ${s.avgWL}\n单次词: ${s.hapax}\n`)}
+
+// Viz
+function renderChart(){if(!engine.selected.size)return;const type=document.getElementById('viz-type').value,topN=+document.getElementById('viz-topn').value||30,canvas=document.getElementById('chart-canvas');let data,title;if(type==='freqbar'){data=engine.getWordList(1,false).slice(0,topN);title=`词频分布 — Top ${topN}`;document.getElementById('chart-title').textContent='X轴=排名，Y轴=频次'}else if(type==='zipf'){data=engine.getWordList(1,false).slice(0,topN*10);title='Zipf 定律（双对数坐标）';document.getElementById('chart-title').textContent='蓝线=实际，绿线=理想'}else if(type==='ttr'){data=engine.getTtrCurve(Math.max(10,Math.floor(engine.totalTokens/200)));title='词汇丰富度曲线 (TTR)';document.getElementById('chart-title').textContent='X轴=累积词形数，Y轴=TTR'}else if(type==='sentlen'){data=engine.getSentLengths();title='句长分布';document.getElementById('chart-title').textContent='X轴=词数，Y轴=频次'}requestAnimationFrame(()=>Chart.draw(canvas,type,data,title))}
+window.addEventListener('resize',()=>{if(activeTab==='viz')renderChart()});
+
+// Preview
+let activePTab='tokens';
+function showPreview(idx){previewIdx=idx;activePTab='tokens';document.querySelectorAll('.ptab').forEach(t=>t.classList.toggle('active',t.dataset.ptab==='tokens'));renderFileList();renderPreview();document.getElementById('preview-modal').classList.add('open')}
+function closePreview(){document.getElementById('preview-modal').classList.remove('open');previewIdx=-1;renderFileList()}
+function switchPTab(el){activePTab=el.dataset.ptab;document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderPreview()}
+function renderPreview(){
+  if(previewIdx<0||previewIdx>=engine.files.length)return;
+  const f=engine.files[previewIdx];
+  document.getElementById('preview-title').textContent=f.name;
+  const sl=SEG_MODE==='word'?(SEG_OK?'词语级 (Intl.Segmenter)':'词语级 (FMM回退)'):'字符级';
+  document.getElementById('preview-meta').textContent=`${f.tokens.length.toLocaleString()} 词形 · ${f.chars.toLocaleString()} 字符 · ${sl}`;
+  const body=document.getElementById('preview-body');
+  if(activePTab==='tokens'){
+    const sc=f.tokens.filter(t=>Tokenizer.isStop(t.token)).length,un=new Set(f.tokens.map(t=>t.token)).size;
+    body.innerHTML=`<div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;padding:10px 12px;background:var(--bg-raised);border-radius:8px">
+      <span style="font-size:11px;color:var(--label-2)">词形 <b style="color:var(--blue)">${f.tokens.length.toLocaleString()}</b></span>
+      <span style="font-size:11px;color:var(--label-2)">词型 <b style="color:var(--blue)">${un.toLocaleString()}</b></span>
+      <span style="font-size:11px;color:var(--label-2)">TTR <b style="color:var(--blue)">${(un/f.tokens.length*100).toFixed(1)}%</b></span>
+      <span style="font-size:11px;color:var(--label-3)">功能词 ${sc.toLocaleString()}</span>
+      <span style="font-size:11px"><span style="color:var(--blue)">●</span> 中文</span>
+      <span style="font-size:11px"><span style="color:#1a8a3c">●</span> 英文</span>
+      <span style="font-size:11px"><span style="color:var(--orange)">●</span> 数字</span>
+    </div><div class="tok-wrap">${f.tokens.slice(0,1500).map(t=>{const c=Tokenizer.classify(t.token);return`<span class="tok ${c}${Tokenizer.isStop(t.token)?' stop':''}">${escHtml(t.raw)}</span>`}).join('')}${f.tokens.length>1500?'<span style="font-size:11px;color:var(--label-3);padding:4px">… 前 1500 词</span>':''}</div>`;
+  }else if(activePTab==='raw'){
+    body.innerHTML=`<div style="font-size:11px;color:var(--label-3);margin-bottom:8px">前 3000 字符 / 共 ${f.chars.toLocaleString()} 字符</div><pre style="font-size:12px;line-height:1.7;color:var(--label-2);white-space:pre-wrap;word-break:break-all;font-family:var(--font-m);background:var(--bg-raised);padding:12px;border-radius:8px">${escHtml(f.content.slice(0,3000))}${f.content.length>3000?'\n…':''}</pre>`;
+  }else if(activePTab==='freq'){
+    const fm={};for(const t of f.tokens)fm[t.token]=(fm[t.token]||0)+1;
+    const top=Object.entries(fm).sort((a,b)=>b[1]-a[1]).slice(0,50),mF=top[0]?.[1]||1;
+    const cols={zh:'var(--blue)',en:'#1a8a3c',num:'var(--orange)'};
+    body.innerHTML=`<div style="font-size:11px;color:var(--label-3);margin-bottom:12px">本文 Top 50 高频词</div>`+
+      top.map(([w,c],i)=>{const cl=Tokenizer.classify(w);return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="font-family:var(--font-m);font-size:10px;color:var(--label-3);width:22px;text-align:right">${i+1}</span><span style="font-family:var(--font-m);font-size:12px;color:${cols[cl]};min-width:80px">${escHtml(w)}</span><div style="flex:1;height:11px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="height:100%;width:${(c/mF*100).toFixed(0)}%;background:${cols[cl]};opacity:.5;border-radius:3px"></div></div><span style="font-family:var(--font-m);font-size:10px;color:var(--label-2);width:30px;text-align:right">${c}</span><span style="font-family:var(--font-m);font-size:10px;color:var(--label-3);width:40px">${(c/f.tokens.length*100).toFixed(2)}%</span></div>`}).join('');
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePreview()});
+
+async function doExport(name,content){
+  if(typeof window.lexaraAPI!=='undefined'){const ok=await window.lexaraAPI.saveExport({defaultName:name,content});if(ok)msg('已导出：'+name)}
+  else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+content],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();msg('已下载：'+name)}
+}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+updateStatusBar();
+</script>
+</body>
+</html>
